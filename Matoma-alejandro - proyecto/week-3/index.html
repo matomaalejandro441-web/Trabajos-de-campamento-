@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🏢 Plataforma de Crowdfunding Inmobiliario</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <div class="app-container">
+      
+      <!-- Header -->
+      <header class="header">
+        <h1>🏢 Crowdfunding Inmobiliario</h1>
+        <p class="subtitle">Sistema de gestión de proyectos e inversiones</p>
+      </header>
+
+      <!-- Navigation Tabs -->
+      <nav class="tabs">
+        <button class="tab-btn active" data-tab="catalog">
+          🏗️ Proyectos
+        </button>
+        <button class="tab-btn" data-tab="users">
+          👥 Usuarios
+        </button>
+        <button class="tab-btn" data-tab="transactions">
+          💰 Inversiones
+        </button>
+        <button class="tab-btn" data-tab="stats">
+          📊 Estadísticas
+        </button>
+      </nav>
+
+      <!-- Tab Content -->
+      <main class="tab-content">
+
+        <!-- Projects Tab -->
+        <section id="catalog" class="tab-panel active">
+          <div class="panel-header">
+            <h2>🏗️ Catálogo de Proyectos</h2>
+            <div class="actions">
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Buscar proyecto..."
+              />
+
+              <select id="filter-type">
+                <option value="all">Todos los tipos</option>
+                <option value="ResidentialProject">Residencial</option>
+                <option value="CommercialProject">Comercial</option>
+                <option value="IndustrialProject">Industrial</option>
+              </select>
+
+              <select id="filter-status">
+                <option value="all">Todos</option>
+                <option value="active">Activos</option>
+                <option value="inactive">Inactivos</option>
+              </select>
+
+              <button id="add-item-btn" class="btn btn-primary">
+                + Agregar Proyecto
+              </button>
+            </div>
+          </div>
+
+          <div id="item-list" class="items-grid"></div>
+
+          <div id="empty-state" class="empty-state" style="display: none;">
+            <p>📭 No hay proyectos registrados</p>
+            <p class="hint">Agrega tu primer proyecto inmobiliario</p>
+          </div>
+        </section>
+
+        <!-- Users Tab -->
+        <section id="users" class="tab-panel">
+          <div class="panel-header">
+            <h2>👥 Usuarios de la Plataforma</h2>
+            <div class="actions">
+              <input
+                type="text"
+                id="search-users"
+                placeholder="Buscar usuario..."
+              />
+
+              <select id="filter-role">
+                <option value="all">Todos los roles</option>
+                <option value="Investor">Inversionistas</option>
+                <option value="Developer">Desarrolladores</option>
+              </select>
+
+              <button id="add-user-btn" class="btn btn-primary">
+                + Agregar Usuario
+              </button>
+            </div>
+          </div>
+
+          <div id="user-list" class="users-grid"></div>
+        </section>
+
+        <!-- Investments Tab -->
+        <section id="transactions" class="tab-panel">
+          <div class="panel-header">
+            <h2>💰 Historial de Inversiones</h2>
+          </div>
+          <div id="transaction-list" class="transactions-list"></div>
+        </section>
+
+        <!-- Stats Tab -->
+        <section id="stats" class="tab-panel">
+          <div class="panel-header">
+            <h2>📊 Estadísticas Generales</h2>
+          </div>
+
+          <div id="stats-container" class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-value" id="stat-total">0</span>
+              <span class="stat-label">Total Proyectos</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="stat-active">0</span>
+              <span class="stat-label">Proyectos Activos</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="stat-inactive">0</span>
+              <span class="stat-label">Proyectos Inactivos</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="stat-users">0</span>
+              <span class="stat-label">Usuarios Registrados</span>
+            </div>
+          </div>
+
+          <div id="stats-details" class="stats-details"></div>
+        </section>
+
+      </main>
+
+      <!-- Modal Proyecto -->
+      <div id="item-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modal-title">Agregar Proyecto</h3>
+            <button class="close-btn" id="close-modal">&times;</button>
+          </div>
+
+          <form id="item-form" class="modal-form">
+
+            <div class="form-group">
+              <label for="item-type">Tipo de Proyecto</label>
+              <select id="item-type" required>
+                <option value="">Selecciona un tipo</option>
+                <option value="ResidentialProject">Residencial</option>
+                <option value="CommercialProject">Comercial</option>
+                <option value="IndustrialProject">Industrial</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="item-name">Nombre del Proyecto *</label>
+              <input type="text" id="item-name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="item-location">Ubicación *</label>
+              <input type="text" id="item-location" required />
+            </div>
+
+            <!-- Campos dinámicos -->
+            <div id="dynamic-fields"></div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-secondary" id="cancel-btn">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Modal Usuario -->
+      <div id="user-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Agregar Usuario</h3>
+            <button class="close-btn" id="close-user-modal">&times;</button>
+          </div>
+
+          <form id="user-form" class="modal-form">
+
+            <div class="form-group">
+              <label for="user-role">Rol</label>
+              <select id="user-role" required>
+                <option value="">Selecciona un rol</option>
+                <option value="Investor">Inversionista</option>
+                <option value="Developer">Desarrollador</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="user-name">Nombre *</label>
+              <input type="text" id="user-name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="user-email">Email *</label>
+              <input type="email" id="user-email" required />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-secondary" id="cancel-user-btn">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
